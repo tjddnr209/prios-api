@@ -1,0 +1,54 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: application-secret.yml
+
+  datasource:
+    url: jdbc:mysql://${DATABASE.ENDPOINT_URL.dev}:3306/prios_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DATABASE.USERNAME.dev}
+    password: ${DATABASE.PASSWORD.dev}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE.CLIENT-ID.dev}
+            client-secret: ${GOOGLE.CLIENT-SECRET.dev}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - email
+              - profile
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+claude:
+  ai:
+    api-key: ${CLAUDE.API-KEY.dev}
+
+discord:
+  error-alert-url: ${DISCORD.ERROR_ALERT_URL.dev}
+
+logging:
+  level:
+    org.springdoc: DEBUG
+    org.springframework.web: DEBUG
